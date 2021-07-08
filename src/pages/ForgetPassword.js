@@ -1,4 +1,4 @@
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -16,7 +16,7 @@ const Login = () => {
   return (
     <>
       <Helmet>
-        <title>Login</title>
+        <title>Reset Password</title>
       </Helmet>
       <Box
         sx={{
@@ -30,16 +30,14 @@ const Login = () => {
         <Container maxWidth="sm">
           <Formik
             initialValues={{
-              email: '',
-              password: ''
+              email: ''
             }}
             validationSchema={Yup.object().shape({
               email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-              password: Yup.string().max(255).required('Password is required')
             })}
             onSubmit={(values) => {
               console.log(values);
-              navigate('/app/dashboard', { replace: true });
+              navigate('/change-password', { replace: true });
             }}
           >
             {({
@@ -57,7 +55,7 @@ const Login = () => {
                     color="textPrimary"
                     variant="h2"
                   >
-                    Sign in
+                    Reset Password
                   </Typography>
                 </Box>
                 <TextField
@@ -73,19 +71,6 @@ const Login = () => {
                   value={values.email}
                   variant="outlined"
                 />
-                <TextField
-                  error={Boolean(touched.password && errors.password)}
-                  fullWidth
-                  helperText={touched.password && errors.password}
-                  label="Password"
-                  margin="normal"
-                  name="password"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  type="password"
-                  value={values.password}
-                  variant="outlined"
-                />
                 <Box sx={{ py: 2 }}>
                   <Button
                     color="primary"
@@ -95,23 +80,9 @@ const Login = () => {
                     type="submit"
                     variant="contained"
                   >
-                    Sign in
+                    Reset
                   </Button>
                 </Box>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  Don&apos;t have an account?
-                  {' '}
-                  <Link
-                    component={RouterLink}
-                    to="/register"
-                    variant="h6"
-                  >
-                    Sign up
-                  </Link>
-                </Typography>
               </form>
             )}
           </Formik>

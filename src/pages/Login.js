@@ -103,14 +103,14 @@ const Login = () => {
                   color="textSecondary"
                   variant="body1"
                 >
-                  Don&apos;t have an account?
+                  Forget your Password?
                   {' '}
                   <Link
                     component={RouterLink}
-                    to="/register"
+                    to="/forget-password"
                     variant="h6"
                   >
-                    Sign up
+                    Reset Password
                   </Link>
                 </Typography>
               </form>

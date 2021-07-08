@@ -1,4 +1,4 @@
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -10,13 +10,18 @@ import {
   Typography
 } from '@material-ui/core';
 
+async function ali() {
+  await console.log('ali');
+  return 'a';
+}
+
 const Login = () => {
   const navigate = useNavigate();
 
   return (
     <>
       <Helmet>
-        <title>Login</title>
+        <title>Change Password</title>
       </Helmet>
       <Box
         sx={{
@@ -30,16 +35,20 @@ const Login = () => {
         <Container maxWidth="sm">
           <Formik
             initialValues={{
-              email: '',
-              password: ''
+              OTP: '',
+              password: '',
+              confirm: ''
             }}
             validationSchema={Yup.object().shape({
-              email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-              password: Yup.string().max(255).required('Password is required')
+              OTP: Yup.string().required('OTP is required'),
+              password: Yup.string().max(255).required('Password is required'),
+              confirm: Yup.string().max(255).oneOf([Yup.ref('password'), null], 'Password must match').required('Confirm Password is required')
             })}
-            onSubmit={(values) => {
+            onSubmit={async (values, { setFieldError }) => {
               console.log(values);
-              navigate('/app/dashboard', { replace: true });
+              setFieldError('OTP', 'hi majid');
+              await setTimeout(await ali(), 5000);
+              navigate('/change-password', { replace: true });
             }}
           >
             {({
@@ -57,20 +66,20 @@ const Login = () => {
                     color="textPrimary"
                     variant="h2"
                   >
-                    Sign in
+                    Change Password
                   </Typography>
                 </Box>
                 <TextField
-                  error={Boolean(touched.email && errors.email)}
+                  error={Boolean(touched.OTP && errors.OTP)}
                   fullWidth
-                  helperText={touched.email && errors.email}
-                  label="Email Address"
+                  helperText={touched.OTP && errors.OTP}
+                  label="OTP"
                   margin="normal"
-                  name="email"
+                  name="OTP"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  type="email"
-                  value={values.email}
+                  type="text"
+                  value={values.OTP}
                   variant="outlined"
                 />
                 <TextField
@@ -86,6 +95,19 @@ const Login = () => {
                   value={values.password}
                   variant="outlined"
                 />
+                <TextField
+                  error={Boolean(touched.confirm && errors.confirm)}
+                  fullWidth
+                  helperText={touched.confirm && errors.confirm}
+                  label="Confirm Password"
+                  margin="normal"
+                  name="confirm"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  type="password"
+                  value={values.confirm}
+                  variant="outlined"
+                />
                 <Box sx={{ py: 2 }}>
                   <Button
                     color="primary"
@@ -95,23 +117,9 @@ const Login = () => {
                     type="submit"
                     variant="contained"
                   >
-                    Sign in
+                    Change Password
                   </Button>
                 </Box>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  Don&apos;t have an account?
-                  {' '}
-                  <Link
-                    component={RouterLink}
-                    to="/register"
-                    variant="h6"
-                  >
-                    Sign up
-                  </Link>
-                </Typography>
               </form>
             )}
           </Formik>
