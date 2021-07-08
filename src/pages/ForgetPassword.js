@@ -30,10 +30,10 @@ const Login = () => {
         <Container maxWidth="sm">
           <Formik
             initialValues={{
-              email: ''
+              username: ''
             }}
             validationSchema={Yup.object().shape({
-              email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+              username: Yup.string().max(255).required('Username is required'),
             })}
             onSubmit={(values) => {
               console.log(values);
@@ -59,16 +59,16 @@ const Login = () => {
                   </Typography>
                 </Box>
                 <TextField
-                  error={Boolean(touched.email && errors.email)}
+                  error={Boolean(touched.username && errors.username)}
                   fullWidth
-                  helperText={touched.email && errors.email}
+                  helperText={touched.username && errors.username}
                   label="Email Address"
                   margin="normal"
-                  name="email"
+                  name="username"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  type="email"
-                  value={values.email}
+                  type="text"
+                  value={values.username}
                   variant="outlined"
                 />
                 <Box sx={{ py: 2 }}>
