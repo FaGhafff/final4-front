@@ -1,9 +1,7 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
-  Avatar,
   Box,
   Card,
   Checkbox,
@@ -15,18 +13,32 @@ import {
   TableRow,
   Typography
 } from '@material-ui/core';
-import getInitials from 'src/utils/getInitials';
+import axios from 'axios';
 
-const CustomerListResults = ({ customers, ...rest }) => {
+function CustomerListResults({ ...rest }) {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
+  const [data] = useState(1);
+  const [responseData, setResponseData] = useState({ hits: [] });
+  const [cached, setCached] = useState(false);
+
+  useEffect(() => {
+    const results = async () => {
+      const d = await axios.get('http://localhost:8080/api/users');
+      setResponseData(d.data);
+    };
+    results().then((r) => console.log(r));
+    console.log('use effect');
+    console.log(responseData);
+    setCached(true);
+  }, []);
 
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds;
 
     if (event.target.checked) {
-      newSelectedCustomerIds = customers.map((customer) => customer.id);
+      newSelectedCustomerIds = data.list.map((user) => user.id);
     } else {
       newSelectedCustomerIds = [];
     }
@@ -61,6 +73,11 @@ const CustomerListResults = ({ customers, ...rest }) => {
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
   };
+  if (!cached) {
+    return (
+      <h1>nadarim data</h1>
+    );
+  }
 
   return (
     <Card {...rest}>
@@ -71,43 +88,43 @@ const CustomerListResults = ({ customers, ...rest }) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedCustomerIds.length === customers.length}
+                    checked={selectedCustomerIds.length === data.list.length}
                     color="primary"
                     indeterminate={
                       selectedCustomerIds.length > 0
-                      && selectedCustomerIds.length < customers.length
+                      && selectedCustomerIds.length < data.list.length
                     }
                     onChange={handleSelectAll}
                   />
                 </TableCell>
                 <TableCell>
-                  Name
+                  First Name
                 </TableCell>
                 <TableCell>
-                  Email
+                  Last Name
                 </TableCell>
                 <TableCell>
-                  Location
+                  Username
                 </TableCell>
                 <TableCell>
-                  Phone
+                  Phone Number
                 </TableCell>
                 <TableCell>
-                  Registration date
+                  Role
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.slice(0, limit).map((customer) => (
+              {data.list.map((user) => (
                 <TableRow
                   hover
-                  key={customer.id}
-                  selected={selectedCustomerIds.indexOf(customer.id) !== -1}
+                  key={user.id}
+                  selected={selectedCustomerIds.indexOf(user.id) !== -1}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={selectedCustomerIds.indexOf(customer.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, customer.id)}
+                      checked={selectedCustomerIds.indexOf(user.id) !== -1}
+                      onChange={(event) => handleSelectOne(event, user.id)}
                       value="true"
                     />
                   </TableCell>
@@ -118,31 +135,25 @@ const CustomerListResults = ({ customers, ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      <Avatar
-                        src={customer.avatarUrl}
-                        sx={{ mr: 2 }}
-                      >
-                        {getInitials(customer.name)}
-                      </Avatar>
                       <Typography
                         color="textPrimary"
                         variant="body1"
                       >
-                        {customer.name}
+                        {user.firstName}
                       </Typography>
                     </Box>
                   </TableCell>
                   <TableCell>
-                    {customer.email}
+                    {user.email}
                   </TableCell>
                   <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                    {`${user.address.city}, ${user.address.state}, ${user.address.country}`}
                   </TableCell>
                   <TableCell>
-                    {customer.phone}
+                    {user.phone}
                   </TableCell>
                   <TableCell>
-                    {moment(customer.createdAt).format('DD/MM/YYYY')}
+                    {moment(user.createdAt).format('DD/MM/YYYY')}
                   </TableCell>
                 </TableRow>
               ))}
@@ -152,7 +163,7 @@ const CustomerListResults = ({ customers, ...rest }) => {
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={customers.length}
+        count={data.size}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}
@@ -161,10 +172,5 @@ const CustomerListResults = ({ customers, ...rest }) => {
       />
     </Card>
   );
-};
-
-CustomerListResults.propTypes = {
-  customers: PropTypes.array.isRequired
-};
-
+}
 export default CustomerListResults;

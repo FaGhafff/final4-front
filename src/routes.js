@@ -13,18 +13,18 @@ import ForgetPassword from './pages/ForgetPassword';
 import ChangePassword from './pages/ChangePassword';
 
 const routes = [
-  // {
-  //   path: 'app',
-  //   element: <DashboardLayout />,
-  //   children: [
-  //     { path: 'account', element: <Account /> },
-  //     { path: 'customers', element: <CustomerList /> },
-  //     { path: 'dashboard', element: <Dashboard /> },
-  //     { path: 'products', element: <ProductList /> },
-  //     { path: 'settings', element: <Settings /> },
-  //     { path: '*', element: <Navigate to="/404" /> }
-  //   ]
-  // },
+  {
+    path: 'app',
+    element: <DashboardLayout />,
+    children: [
+      { path: 'account', element: <Account /> },
+      { path: 'customers', element: <CustomerList /> },
+      { path: 'dashboard', element: <Dashboard /> },
+      { path: 'products', element: <ProductList /> },
+      { path: 'settings', element: <Settings /> },
+      { path: '*', element: <Navigate to="/404" /> }
+    ]
+  },
   {
     path: '/',
     element: <MainLayout />,
