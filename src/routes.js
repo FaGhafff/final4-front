@@ -1,5 +1,8 @@
 import { Navigate } from 'react-router-dom';
 import DashboardLayout from 'src/components/DashboardLayout';
+import DashboardLayoutAdmin from 'src/pages/admin/components/DashboardLayout';
+import DashboardLayoutStudent from 'src/pages/student/components/DashboardLayout';
+import DashboardLayoutMaster from 'src/pages/master/components/DashboardLayout';
 import MainLayout from 'src/components/MainLayout';
 import Account from 'src/pages/Account';
 import CustomerList from 'src/pages/CustomerList';
@@ -21,9 +24,7 @@ const routes = [
       { path: 'customers', element: <CustomerList /> },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'products', element: <ProductList /> },
-      { path: 'settings', element: <Settings /> },
-      { path: '*', element: <Navigate to="/404" /> }
-    ]
+      { path: 'settings', element: <Settings /> }]
   },
   {
     path: '/',
@@ -41,7 +42,7 @@ const routes = [
   },
   {
     path: 'app/admin',
-    element: <DashboardLayout />,
+    element: <DashboardLayoutAdmin />,
     children: [
       { path: 'account', element: <Account /> },
       { path: 'customers', element: <CustomerList /> },
@@ -53,7 +54,7 @@ const routes = [
   },
   {
     path: 'app/master',
-    element: <DashboardLayout />,
+    element: <DashboardLayoutMaster />,
     children: [
       { path: 'account', element: <Account /> },
       { path: 'customers', element: <CustomerList /> },
@@ -65,7 +66,7 @@ const routes = [
   },
   {
     path: 'app/student',
-    element: <DashboardLayout />,
+    element: <DashboardLayoutStudent />,
     children: [
       { path: 'account', element: <Account /> },
       { path: 'customers', element: <CustomerList /> },

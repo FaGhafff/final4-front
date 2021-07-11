@@ -10,6 +10,7 @@ import {
   Link,
   Typography
 } from '@material-ui/core';
+import axios from 'axios';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -38,9 +39,37 @@ const Login = () => {
               username: Yup.string().max(255).required('Username is required'),
               password: Yup.string().max(255).required('Password is required')
             })}
-            onSubmit={(values) => {
-              console.log(values);
-              navigate('/app/dashboard', { replace: true });
+            onSubmit={async (values, { setFieldError }) => {
+              const p = await axios({
+                method: 'post',
+                url: 'http://localhost:8080/login',
+                header: {},
+                data: {
+                  userName: values.username,
+                  password: values.password
+                }
+              }).then((value) => {
+                localStorage.setItem('username',value.data.username);
+                localStorage.setItem('role',value.data.role);
+                localStorage.setItem('token',value.data.token);
+                localStorage.setItem('expireAt',value.data.expireAt);
+                console.log(value);
+                switch (value.data.role) {
+                  case "ROLE_ADMIN":
+                    navigate('/app/admin/dashboard', { replace: true });
+                    break;
+                  case "ROLE_STUDENT":
+                    navigate('/app/student/dashboard', { replace: true });
+                    break;
+                  case "ROLE_MASTER":
+                    navigate('/app/master/dashboard', { replace: true });
+                    break;
+                  default:
+                    navigate('/404', { replace: true });
+                }
+              }).catch((e) => {
+                setFieldError('password', e.message);
+              });
             }}
           >
             {({

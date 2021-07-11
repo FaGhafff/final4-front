@@ -9,6 +9,7 @@ import {
   TextField,
   Typography
 } from '@material-ui/core';
+import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Login = () => {
   return (
     <>
       <Helmet>
-        <title>Reset Password</title>
+        <title>Forget Password</title>
       </Helmet>
       <Box
         sx={{
@@ -35,7 +36,7 @@ const Login = () => {
             validationSchema={Yup.object().shape({
               username: Yup.string().max(255).required('Username is required'),
             })}
-            onSubmit={(values) => {
+            onSubmit={async (values) => {
               console.log(values);
               navigate('/change-password', { replace: true });
             }}
@@ -55,14 +56,14 @@ const Login = () => {
                     color="textPrimary"
                     variant="h2"
                   >
-                    Reset Password
+                    Forget Password
                   </Typography>
                 </Box>
                 <TextField
                   error={Boolean(touched.username && errors.username)}
                   fullWidth
                   helperText={touched.username && errors.username}
-                  label="Email Address"
+                  label="Username"
                   margin="normal"
                   name="username"
                   onBlur={handleBlur}
